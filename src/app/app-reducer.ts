@@ -3,10 +3,16 @@ import {authAPI} from '../api/todolists-api'
 import {setIsLoggedInAC} from '../features/Login/auth-reducer'
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 
-const initialState = {
-    status: 'idle' as RequestStatusType,
-    error: null as string | null,
+const initialState: InitialStateType = {
+    status: 'idle',
+    error: null,
     isInitialized: false
+}
+
+export type InitialStateType = {
+    status: RequestStatusType
+    error: string | null
+    isInitialized: boolean
 }
 
 const slice = createSlice({
