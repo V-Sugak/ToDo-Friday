@@ -36,8 +36,8 @@ export const TodolistsList: React.FC<PropsType> = ({demo = false}) => {
         dispatch(thunk)
     }, [])
 
-    const removeTask = useCallback(function (id: string, todolistId: string) {
-        const thunk = removeTaskTC(id, todolistId)
+    const removeTask = useCallback(function (taskId: string, todolistId: string) {
+        const thunk = removeTaskTC({taskId, todolistId})
         dispatch(thunk)
     }, [])
 
@@ -85,7 +85,6 @@ export const TodolistsList: React.FC<PropsType> = ({demo = false}) => {
             <AddItemForm addItem={addTodolist}/>
         </Grid>
         <Grid container spacing={3}>
-            test
             {
                 todolists.map(tl => {
                     let allTodolistTasks = tasks[tl.id]
