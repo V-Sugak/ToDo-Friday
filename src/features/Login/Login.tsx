@@ -1,9 +1,9 @@
 import React from 'react'
 import {Button, Checkbox, FormControl, FormControlLabel, FormGroup, FormLabel, Grid, TextField} from '@material-ui/core'
 import {FormikHelpers, useFormik} from 'formik'
-import {useDispatch, useSelector} from 'react-redux'
+import {useSelector} from 'react-redux'
 import {loginTC} from './auth-reducer'
-import {AppRootStateType} from '../../app/store'
+import {AppRootStateType, useAppDispatch} from '../../app/store'
 import {Redirect} from 'react-router-dom'
 
 type FormValuesType = {
@@ -13,7 +13,7 @@ type FormValuesType = {
 }
 
 export const Login = () => {
-    const dispatch = useDispatch()
+    const dispatch = useAppDispatch()
 
     const isLoggedIn = useSelector<AppRootStateType, boolean>(state => state.auth.isLoggedIn);
 
@@ -36,8 +36,14 @@ export const Login = () => {
             password: '',
             rememberMe: false
         },
-        onSubmit: (values: FormValuesType, formikHelpers: FormikHelpers<FormValuesType>) => {
-            dispatch(loginTC(values));
+        onSubmit: async (values: FormValuesType, formikHelpers: FormikHelpers<FormValuesType>) => {
+            const action = await dispatch(loginTC(values));  // у него есть  meta, payload, type
+            if (loginTC.rejected.match(action)) {
+                if (action.payload?.fieldsErrors?.length) {
+                    const error = action.payload.fieldsErrors[0]
+                    formikHelpers.setFieldError(error.field, error.error)
+                }
+            }
         },
     })
 
